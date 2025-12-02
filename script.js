@@ -1,26 +1,51 @@
-const connectButton = document.getElementById('connectButton');
-const accountInfo = document.getElementById('accountInfo');
-if (typeof window.ethereum !== 'undefined') {
-console.log('установлен!');
-// Создаем провайдер Ethers.js
+// Адрес вашего развернутого контракта
+const contractAddress = '0x3C80DAF6099538971ceD6C4377E40bAd4D7cD614';
+// ABI вашего контракта (можно взять тот набор, который формирует Remix)
+const contractAbi = [
+{
+"inputs": [
+{
+"internalType": "string",
+"name": "_message",
+"type": "string"
+}
+],
+"name": "setMessage",
+"outputs": [],
+"stateMutability": "nonpayable",
+"type": "function"
+},
+{
+"inputs": [],
+"name": "getMessage",
+"outputs": [
+{
+"internalType": "string",
+"name": "",
+"type": "string"
+}
+],
+"stateMutability": "view",
+"type": "function"
+}
+];
+// При подключении к Mmask
+if (window.ethereum) {
 const provider = new ethers.providers.Web3Provider(window.ethereum);
-// Слушаем событие подключения кошелька
-connectButton.addEventListener('click', async () => {
-try {
-await window.ethereum.request({ method: 'eth_requestAccounts' });
 const signer = provider.getSigner();
-const address = await signer.getAddress();
-const balance = await provider.getBalance(address);
-accountInfo.innerHTML = `
-<p>Адрес кошелька: ${address}</p>
-<p>Баланс (в Wei): ${balance.toString()}</p>
-<p>Баланс (в Ether): ${ethers.utils.formatEther(balance)}</p>
-`;
-} catch (error) {
-console.error("Ошибка при подключении:", error);
-}
-});
-}
-else {
-accountInfo.innerHTML = '<p>Пожалуйста, установите .</p>';
+const contract = new ethers.Contract(contractAddress, contractAbi, signer);
+
+5
+
+document.getElementById('setMessageButton').onclick = async () => {
+const message = document.getElementById('messageInput').value;
+await contract.setMessage(message);
+alert('Сообщение установлено!');
+};
+document.getElementById('getMessageButton').onclick = async () => {
+const message = await contract.getMessage();
+document.getElementById('messageDisplay').innerText = message;
+};
+} else {
+alert('Установите MMask или другой кошелек.');
 }

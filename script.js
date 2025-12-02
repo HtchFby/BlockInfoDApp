@@ -9,7 +9,7 @@ const timeAfterSpan = document.getElementById('timeAfter');
 const chainIdSpan = document.getElementById('chainId');
 
 // Адрес вашего развернутого контракта BlockInfo
-const contractAddress = "0x2905ecCAf4ad7f3773393EEceD2a534729AB88F2"; 
+const contractAddress = "0x9726cEF6a129dbe176232B5E4452Ef65b1cc0209"; 
 
 // ABI контракта
 const contractAbi = [
@@ -70,3 +70,4 @@ if (window.ethereum) {
 } else {
     alert('Установите MetaMask или другой совместимый кошелек.');
 }
+
